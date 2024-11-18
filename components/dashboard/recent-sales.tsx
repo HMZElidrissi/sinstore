@@ -39,10 +39,6 @@ export function RecentSales() {
             {recentSales.map(sale => (
                 <div key={sale.email} className="flex items-center">
                     <Avatar className="h-9 w-9">
-                        <AvatarImage
-                            src={`/avatars/${sale.initials}.png`}
-                            alt={sale.name}
-                        />
                         <AvatarFallback>{sale.initials}</AvatarFallback>
                     </Avatar>
                     <div className="ml-4 space-y-1">

@@ -1,0 +1,77 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum ActivityType {
+  SIGN_IN
+  SIGN_OUT
+  UPDATE_PASSWORD
+  DELETE_ACCOUNT
+  UPDATE_ACCOUNT
+  ACCEPT_INVITATION
+  PASSWORD_RESET_REQUEST
+  PASSWORD_RESET_COMPLETE
+}
+
+model User {
+  id              Int             @id @default(autoincrement())
+  name            String?         @db.VarChar(100)
+  email           String          @unique @db.VarChar(255)
+  passwordHash    String          @map("password_hash")
+  role            Role            @default(USER)
+  createdAt       DateTime        @default(now()) @map("created_at")
+  updatedAt       DateTime        @default(now()) @map("updated_at")
+  deletedAt       DateTime?       @map("deleted_at")
+  activities      ActivityLog[]
+  invitationsSent Invitation[]    @relation("InvitedBy")
+  PasswordReset   PasswordReset[]
+
+  @@map("users")
+}
+
+model ActivityLog {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  action    String
+  timestamp DateTime @default(now())
+  ipAddress String?  @map("ip_address") @db.VarChar(45)
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@map("activity_logs")
+}
+
+model Invitation {
+  id        Int      @id @default(autoincrement())
+  email     String   @db.VarChar(255)
+  role      Role     @default(USER)
+  invitedBy Int      @map("invited_by")
+  invitedAt DateTime @default(now()) @map("invited_at")
+  expiresAt DateTime @map("expires_at")
+  status    String   @default("pending") @db.VarChar(20)
+  token     String   @unique // For secure invitation links
+  inviter   User     @relation("InvitedBy", fields: [invitedBy], references: [id])
+
+  @@map("invitations")
+}
+
+model PasswordReset {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  token     String   @unique
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  used      Boolean  @default(false)
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@map("password_resets")
+}

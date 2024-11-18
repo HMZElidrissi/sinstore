@@ -41,7 +41,7 @@ export function DashboardStats() {
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-bold">{stat.value}</div>
-                        <p className="text-xs text-muted-foreground">
+                        <p className="text-xs text-yellow-600 text-muted-foreground">
                             {stat.description}
                         </p>
                     </CardContent>

@@ -1,22 +1,36 @@
+'use client';
+
 import { SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { cn } from '@/lib/utils';
+import { usePathname } from 'next/navigation';
+import Link from 'next/link';
 import { NavigationItem } from '@/config/dashboard';
 
-export default function NavItem({ item }: { item: NavigationItem }) {
+interface NavItemProps {
+    item: NavigationItem;
+}
+
+export default function NavItem({ item }: NavItemProps) {
+    const pathname = usePathname();
+
+    // Check if the current path matches either the exact href or the pattern
+    const isActive = item.pattern
+        ? new RegExp(item.pattern).test(pathname)
+        : pathname === item.href;
+
     return (
         <SidebarMenuItem>
             <SidebarMenuButton
                 asChild
                 className={cn(
                     'p-5 hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors relative',
-                    item.isActive &&
-                        'bg-gray-100 dark:bg-gray-800 text-primary',
+                    isActive && 'bg-gray-100 dark:bg-gray-800 text-primary',
                 )}>
-                <a href={item.href} className="flex items-center gap-3">
+                <Link href={item.href} className="flex items-center gap-3">
                     <item.icon
                         className={cn(
                             'h-4 w-4',
-                            item.isActive
+                            isActive
                                 ? 'text-primary'
                                 : 'text-gray-500 dark:text-gray-400',
                         )}
@@ -24,7 +38,7 @@ export default function NavItem({ item }: { item: NavigationItem }) {
                     <span
                         className={cn(
                             'font-medium',
-                            item.isActive
+                            isActive
                                 ? 'text-primary'
                                 : 'text-gray-700 dark:text-gray-300',
                         )}>
@@ -35,7 +49,7 @@ export default function NavItem({ item }: { item: NavigationItem }) {
                             {item.badge}
                         </span>
                     )}
-                </a>
+                </Link>
             </SidebarMenuButton>
         </SidebarMenuItem>
     );

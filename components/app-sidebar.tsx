@@ -33,7 +33,7 @@ const navigationItems = [
     { title: 'Authentication', icon: Lock, url: '#' },
 ];
 
-const NavItem = ({ item }) => (
+const NavItem = ({ item }: { item: (typeof navigationItems)[0] }) => (
     <SidebarMenuItem>
         <SidebarMenuButton
             asChild

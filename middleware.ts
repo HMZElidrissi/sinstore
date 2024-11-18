@@ -2,7 +2,12 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { getSession, verifyToken } from '@/auth/session';
 
-const guestRoutes = ['/sign-in', '/accept-invitation', '/forgot-password', '/reset-password'];
+const guestRoutes = [
+    '/sign-in',
+    '/accept-invitation',
+    '/forgot-password',
+    '/reset-password',
+];
 
 export async function middleware(request: NextRequest) {
     const pathname = request.nextUrl.pathname;
