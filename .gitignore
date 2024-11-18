@@ -46,3 +46,7 @@ next-env.d.ts
 .dev.vars
 /ignored/
 /.env
+
+# IDE files
+.idea
+.vscode
