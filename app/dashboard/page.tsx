@@ -31,7 +31,7 @@ export default function DashboardPage() {
                 <Card className="md:col-span-1 lg:col-span-4">
                     <CardHeader>
                         <CardTitle>Recent Sales</CardTitle>
-                        <CardDescription>
+                        <CardDescription className="text-indigo-500">
                             You made 265 sales this month.
                         </CardDescription>
                     </CardHeader>
